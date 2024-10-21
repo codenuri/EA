@@ -21,9 +21,14 @@ void foo(T obj)
 	
 
 	// 아래 코드를 생각해 보세요
-	T::value * 10;
-	T::type  * p2;
-
+	// dependent name(의존이름) : 템플릿 인자 T에 의존해서 꺼내는 이름
+	//						=> 컴파일러는 무조건 값으로 해석한다.
+	T::value * 10;	// ok
+//	T::type  * p2;	// error. T::type을 값으로 해석해서 곱하기로 생각.
+					// 그런데, p2를 찾을수 없다.!!
+					
+	typename T::type  * p2; // ok. dependent name 을 
+							// 타입으로 해석해 달라.
 }
 
 
