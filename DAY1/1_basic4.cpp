@@ -28,6 +28,12 @@ T square(T a)
 	return a * a;
 }
 
+// 아래 코드가 위와 동일합니다. - auto 버전에 제약전달 코드. 
+auto square(std::integral auto a)
+{
+	return a * a;
+}
+
 
 int main()
 {
