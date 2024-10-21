@@ -15,17 +15,27 @@ template<typename T> struct type_identity
 	using type = T;
 };
 
-// type_identity<int>::type 은 결국 "?" 타입
+type_identity<int>::type n;  // n 은 결국 "int" 타입
+						     // 즉, type_identity<T>::type 은 T 타입
+							 // int n 하면 되는데, 왜 이렇게 하나요 ??
 
+							// 함수 인자로 사용하기 위해서 만든 것
 
 template<typename T> void foo(T a)  { }
-template<typename T> void goo( typename type_identity<T>::type a)  { }
+//template<typename T> void goo( typename type_identity<T>::type a)  { }
+template<typename T> void goo( typename std::type_identity<T>::type a)  { }
 
 int main()
 {
 	foo(10);		// ok
 	foo<int>(10);	// ok
 
-	goo(10);	  // ok
+	goo(10);	  // error. 10 으로 타입을 결정해야 하는데
+					// type_identity 가 구조체이고, deduction guide 가 없으므로
+					// 추론될수 없다.
+					// => 함수 템플릿 만들때 컴파일러에 의한 타입 추론을 막는 기술
+					// => C++ 표준에 std::type_identity 가 C++20 부터 제공됩니다.
+					// => std::forward<T>(arg) 에서 T 를 생략 할수 없습니다.
+					//    즉, 이 기술로 타입추론을 막고 있는 것
 	goo<int>(10); // ok
 }
